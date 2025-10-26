@@ -1,18 +1,38 @@
 # 🏙️ NYC Builder 2025
 
-**A browser-based game about NYC housing laws**
+**An Educational Arcade Game About NYC Housing Laws**
 
-Presented by **Maximum New York**
+Presented by [**Maximum New York**](https://www.maximumnewyork.com/about)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🎮 Play Now
 
-Visit the live game at: [Your deployment URL here]
+Visit the live game at: https://nyc-builder-mny.netlify.app/
 
-## 📖 About
+## 📖 About This Game
 
-NYC Builder 2025 is an educational arcade game that demonstrates how different NYC housing laws can impact building development. Players control a building and must navigate three different legal challenges, each representing a real NYC housing law that affects development.
+NYC Builder 2025 is an educational arcade game that makes NYC housing policy interactive and entertaining. Players control a building that must survive against three different legal challenges—Article 78, FAR (Floor Area Ratio), and Member Deference—each representing real NYC housing laws that affect development.
+
+This game embodies Maximum New York's philosophy: **civics education should be entertaining and outcompete Netflix**. Instead of dry policy documents, experience firsthand how different laws impact housing development through fast-paced gameplay.
+
+## 🏛️ About Maximum New York
+
+[Maximum New York](https://www.maximumnewyork.com/about) is a new civics academy focused on **governmental mechanics**—the study of the components of government and law, and how they interrelate. 
+
+**Mission:** Far too few people understand how NYC's government works, and there is no academy to teach them. MNY combats this through intensive, robust education on NYC's governmental systems, with special attention to case studies and political history.
+
+**What Makes MNY Different:**
+- Trains a smaller group to a very high level, creating deep knowledge and expertise
+- Focuses on individuals who can push big, vital projects through NYC
+- Students meet co-founders, employers/employees, and best friends—the social graph is part of the value
+- Emphasizes that civic instruction must be **entertaining** and **good**
+
+**Learn More:**
+- Website: [https://www.maximumnewyork.com](https://www.maximumnewyork.com)
+- About: [https://www.maximumnewyork.com/about](https://www.maximumnewyork.com/about)
+- Contact: daniel@maximumnewyork.com
+- Founded by Daniel Golliher (Government degree, Harvard College)
 
 ### The Laws
 
@@ -171,36 +191,71 @@ Contributions are welcome! This is an open-source educational project.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 🎓 Educational Use
+## 🎓 Educational Philosophy
 
-This game is designed to raise awareness about NYC housing policy. Feel free to:
-- Use it in educational settings
-- Modify it for your own advocacy
-- Share it to spark conversations about housing
-- Fork it and create your own versions
+This game follows Maximum New York's core principle: **civics education must be entertaining and compete with Netflix**. As MNY founder Daniel Golliher notes:
+
+> "Civics already has a bad reputation as a boring field. But this isn't the fault of the field—it's the fault of generations of terrible teachers. Good political and civic instruction requires outcompeting Netflix."
+
+This game makes housing policy:
+- **Interactive** - Experience laws through gameplay, not reading
+- **Memorable** - Learn through doing and failing
+- **Shareable** - Easy to spread and discuss
+- **Accessible** - No prior knowledge required
+
+## 🎯 Educational Use
+
+This game is designed to raise awareness about NYC housing policy and governmental mechanics. Feel free to:
+- Use it in educational settings and civic tech classes
+- Modify it for your own advocacy or teaching
+- Share it to spark conversations about housing and government
+- Fork it and create your own versions about different policy areas
+- Use it as an example of making civics entertaining
+
+**For Civic Educators:** If you're teaching NYC government, housing policy, or governmental mechanics, this game can serve as an engaging introduction or case study. Contact Maximum New York for educational partnerships.
 
 ## 🙏 Acknowledgments
 
-- **Maximum New York** - For housing advocacy and inspiration
-- **Phaser** - For the amazing game framework
+- **[Maximum New York](https://www.maximumnewyork.com)** - For pioneering entertaining civics education and housing advocacy
+- **Daniel Golliher** - Founder of Maximum New York, for the vision that civics can and should be fun
+- **Phaser** - For the powerful game framework
 - **React** - For the UI framework
-- The NYC housing advocacy community
+- The NYC housing advocacy and civic tech community
 
 ## 📞 Contact & Support
 
+### About Maximum New York
+- **Website**: [https://www.maximumnewyork.com](https://www.maximumnewyork.com)
+- **About Page**: [https://www.maximumnewyork.com/about](https://www.maximumnewyork.com/about)
+- **Contact**: daniel@maximumnewyork.com
+- **Classes**: Learn governmental mechanics through MNY's intensive courses
+- **Twitter/LinkedIn**: @danielgolliher
+
+### About This Game
 - **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/yourusername/nyc-builder-2025/issues)
-- **Website**: [Maximum New York](https://maximumnewyork.org) (if applicable)
+- **Game Questions**: Use GitHub Issues or reach out to the development team
 
-## 🗳️ Take Action
+## 🗳️ Take Action & Learn More
 
-This game is inspired by real NYC housing policies. To learn more about housing advocacy:
+This game is inspired by real NYC housing policies. To deepen your understanding:
+
+**Learn Governmental Mechanics:**
+- Take a [Maximum New York class](https://www.maximumnewyork.com/classes) to understand how NYC government really works
+- Learn the hierarchy of authorities, case studies on municipal transformation, and practical political action
+- Network with technologists, city employees, legislative staffers, and engaged citizens
+
+**Get Involved in Housing:**
 - Research Proposition 4 and similar housing initiatives
-- Contact your local representatives
+- Understand the real Article 78, FAR, and Member Deference through civic education
+- Contact your local representatives with informed perspectives
 - Support organizations working on housing policy
 - Vote in local elections
 
+**Why MNY's Approach Matters:**
+As Daniel Golliher writes, "If you've ever had the thought 'people are too apathetic to learn this,' you are probably blaming others for your own inability to relay the material in a compelling fashion. The call of civics is a call of excellence."
+
 ---
 
-**Built with ❤️ for better housing policy in NYC**
+**Built with ❤️ for entertaining civics education and better housing policy in NYC**
 
-*Note: This is an educational game and artistic representation. Game mechanics are simplified versions of complex legal concepts.*
+*This is an educational game and artistic representation. Game mechanics are simplified versions of complex legal concepts. For deep understanding of NYC governmental mechanics, explore [Maximum New York's curriculum](https://www.maximumnewyork.com).*
