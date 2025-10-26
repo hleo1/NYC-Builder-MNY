@@ -135,28 +135,6 @@ src/
 └── main.tsx                    # Entry point
 ```
 
-## 🎨 Customization
-
-### Adding New Laws
-
-1. Create a new scene extending `BaseGame` in `src/scenes/`
-2. Implement the required abstract methods:
-   - `getGameTitle()` - Return the game title
-   - `getLawEmoji()` - Return the emoji for the law
-   - `setupGameSpecifics()` - Initialize game-specific elements
-   - `onCollision()` - Handle what happens when law touches building
-   - `updateGameSpecifics()` - Update game-specific logic each frame
-
-3. Add the scene to `src/components/PhaserGame.tsx`
-4. Add a button in `src/scenes/MainMenu.ts`
-
-### Customizing Visuals
-
-- **Emojis**: Replace text emojis in scene files with custom sprites
-- **Colors**: Modify color schemes in each scene's `create()` method
-- **Animations**: Add Phaser tweens and particle effects
-- **Branding**: Update branding text in `MainMenu.ts`
-
 ## 📄 License
 
 **MIT License**
