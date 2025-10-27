@@ -31,4 +31,6 @@ body {
 canvas {
   image-rendering: auto;
   filter: contrast(1.05) brightness(1.02);
+  display: block;
+  margin: 0 auto;
 }
