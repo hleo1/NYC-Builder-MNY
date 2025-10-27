@@ -26,10 +26,11 @@ export default abstract class BaseGame extends Phaser.Scene {
     // Wait for custom font to load
     const fontPromise = document.fonts?.load
       ? Promise.all([
+          document.fonts.load('64px "BoldPixels"'),
+          document.fonts.load('48px "BoldPixels"'),
+          document.fonts.load('40px "BoldPixels"'),
+          document.fonts.load('32px "BoldPixels"'),
           document.fonts.load('24px "BoldPixels"'),
-          document.fonts.load('18px "BoldPixels"'),
-          document.fonts.load('16px "BoldPixels"'),
-          document.fonts.load('12px "BoldPixels"'),
         ])
       : Promise.resolve();
 
@@ -38,46 +39,41 @@ export default abstract class BaseGame extends Phaser.Scene {
 
   create() {
     const { width, height } = this.cameras.main;
-    this.cameras.main.setBackgroundColor('#000033');
+    
+    // Chalkboard green background to match main menu
+    this.cameras.main.setBackgroundColor('#2c5f4f');
 
-    // Add scanlines for retro CRT effect
-    this.createScanlines(width, height);
-
-    // Title with retro styling
-    const title = this.add.text(width / 2, 25, this.getGameTitle(), {
-      fontSize: '24px',
-      color: '#00ff00',
+    // Title with chalkboard styling - even bigger and higher
+    const title = this.add.text(width / 2, 40, this.getGameTitle(), {
+      fontSize: '56px',
+      color: '#f5deb3',
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold'
     });
     title.setOrigin(0.5);
 
-    // Create retro HUD box
-    const hudBox = this.add.rectangle(width / 2, 70, 300, 50, 0x000000, 0.7);
-    hudBox.setStrokeStyle(2, 0x00ff00);
-
-    // Timer with retro display
-    this.timerText = this.add.text(width / 2 - 70, 70, 'TIME:30', {
-      fontSize: '18px',
-      color: '#ff00ff',
+    // Timer display - bigger and cleaner
+    this.timerText = this.add.text(100, 120, 'TIME: 30', {
+      fontSize: '32px',
+      color: '#ffffff',
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold'
     });
-    this.timerText.setOrigin(0.5);
+    this.timerText.setOrigin(0, 0.5);
 
-    // Score with retro display
-    this.scoreText = this.add.text(width / 2 + 70, 70, 'SCR:100', {
-      fontSize: '18px',
-      color: '#ffff00',
+    // Score display - bigger and cleaner
+    this.scoreText = this.add.text(width - 100, 120, 'SCORE: 100', {
+      fontSize: '32px',
+      color: '#ffffff',
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold'
     });
-    this.scoreText.setOrigin(0.5);
+    this.scoreText.setOrigin(1, 0.5);
 
-    // Instructions with retro style
-    const instructions = this.add.text(width / 2, height - 20, '<ARROWS:MOVE> <ESC:MENU>', {
-      fontSize: '10px',
-      color: '#00ffff',
+    // Instructions at bottom - much bigger
+    const instructions = this.add.text(width / 2, height - 50, 'ARROWS: MOVE  |  ESC: MENU', {
+      fontSize: '28px',
+      color: '#d4a574',
       fontFamily: 'BoldPixels, Courier New, monospace'
     });
     instructions.setOrigin(0.5);
@@ -92,14 +88,14 @@ export default abstract class BaseGame extends Phaser.Scene {
     this.law.setOrigin(0.5);
     this.law.setScale(0.12); // Smaller scale for gameplay
 
-    // Create law label text that follows the script
+    // Create law label text that follows the script - bigger
     this.lawLabel = this.add.text(this.law.x, this.law.y + 30, this.getLawLabel(), {
-      fontSize: '12px',
-      color: '#ffff00',
+      fontSize: '20px',
+      color: '#f5deb3',
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold',
-      backgroundColor: '#000000',
-      padding: { x: 3, y: 1 }
+      backgroundColor: '#1a3a2f',
+      padding: { x: 6, y: 3 }
     });
     this.lawLabel.setOrigin(0.5);
 
@@ -158,7 +154,7 @@ export default abstract class BaseGame extends Phaser.Scene {
     // Keep building in bounds
     const { width, height } = this.cameras.main;
     this.building.x = Phaser.Math.Clamp(this.building.x, 20, width - 20);
-    this.building.y = Phaser.Math.Clamp(this.building.y, 130, height - 60);
+    this.building.y = Phaser.Math.Clamp(this.building.y, 200, height - 60);
 
     // Move law towards building
     this.moveLawTowardsBuilding();
@@ -195,11 +191,11 @@ export default abstract class BaseGame extends Phaser.Scene {
     if (this.gameOver) return;
 
     this.timeRemaining--;
-    this.timerText.setText(`TIME:${this.timeRemaining.toString().padStart(2, '0')}`);
+    this.timerText.setText(`TIME: ${this.timeRemaining}`);
 
     // Flash timer when low
     if (this.timeRemaining <= 10) {
-      this.timerText.setColor(this.timeRemaining % 2 === 0 ? '#ff0000' : '#ff00ff');
+      this.timerText.setColor(this.timeRemaining % 2 === 0 ? '#ff6b6b' : '#ffffff');
     }
 
     if (this.timeRemaining <= 0) {
@@ -211,15 +207,15 @@ export default abstract class BaseGame extends Phaser.Scene {
     this.gameOver = true;
 
     const { width, height } = this.cameras.main;
-    const message = won ? '*** VICTORY ***' : '** GAME OVER **';
-    const color = won ? '#00ff00' : '#ff0000';
+    const message = won ? 'VICTORY!' : 'GAME OVER';
+    const color = won ? '#90ee90' : '#ff6b6b';
 
-    // Retro game over screen
-    const overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.8);
+    // Chalkboard overlay
+    const overlay = this.add.rectangle(0, 0, width, height, 0x1a3a2f, 0.9);
     overlay.setOrigin(0);
 
-    const resultText = this.add.text(width / 2, height / 2 - 60, message, {
-      fontSize: '48px',
+    const resultText = this.add.text(width / 2, height / 2 - 100, message, {
+      fontSize: '64px',
       color: color,
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold'
@@ -229,23 +225,23 @@ export default abstract class BaseGame extends Phaser.Scene {
     // Blinking effect
     this.tweens.add({
       targets: resultText,
-      alpha: 0.3,
-      duration: 500,
+      alpha: 0.5,
+      duration: 600,
       yoyo: true,
       repeat: -1
     });
 
-    const finalScore = this.add.text(width / 2, height / 2, `SCORE: ${Math.round(this.score).toString().padStart(5, '0')}`, {
-      fontSize: '28px',
-      color: '#ffff00',
+    const finalScore = this.add.text(width / 2, height / 2, `SCORE: ${Math.round(this.score)}`, {
+      fontSize: '40px',
+      color: '#f5deb3',
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold'
     });
     finalScore.setOrigin(0.5);
 
-    const menuText = this.add.text(width / 2, height / 2 + 60, '[ PRESS SPACE ]', {
-      fontSize: '16px',
-      color: '#00ffff',
+    const menuText = this.add.text(width / 2, height / 2 + 100, 'PRESS SPACE', {
+      fontSize: '28px',
+      color: '#ffffff',
       fontFamily: 'BoldPixels, Courier New, monospace'
     });
     menuText.setOrigin(0.5);
@@ -253,7 +249,7 @@ export default abstract class BaseGame extends Phaser.Scene {
     // Blinking "press space"
     this.tweens.add({
       targets: menuText,
-      alpha: 0,
+      alpha: 0.3,
       duration: 800,
       yoyo: true,
       repeat: -1
@@ -264,13 +260,6 @@ export default abstract class BaseGame extends Phaser.Scene {
     });
   }
 
-  protected createScanlines(width: number, height: number) {
-    // Create CRT scanline effect
-    for (let i = 0; i < height; i += 4) {
-      const line = this.add.rectangle(0, i, width, 2, 0x000000, 0.3);
-      line.setOrigin(0);
-    }
-  }
 
   protected abstract getGameTitle(): string;
   protected abstract getLawLabel(): string;

@@ -42,8 +42,8 @@ const PhaserGame: React.FC<PhaserGameProps> = ({
       render: {
         antialiasGL: true,
         antialias: true,
-        roundPixels: false,
-        pixelArt: false
+        roundPixels: true,
+        pixelArt: true
       }
     };
 

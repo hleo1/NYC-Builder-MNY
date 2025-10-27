@@ -9,7 +9,7 @@ export default class FARGame extends BaseGame {
   }
 
   protected getGameTitle(): string {
-    return '>> F.A.R. LIMIT <<';
+    return 'F.A.R. LIMIT';
   }
 
   protected getLawLabel(): string {
@@ -19,15 +19,15 @@ export default class FARGame extends BaseGame {
   protected setupGameSpecifics(): void {
     const { width } = this.cameras.main;
     
-    const subtitle = this.add.text(width / 2, 105, '[ SHRINK LAW // DONT DISAPPEAR ]', {
-      fontSize: '12px',
-      color: '#ff00ff',
+    const subtitle = this.add.text(width / 2, 85, 'SHRINK LAW - DON\'T DISAPPEAR', {
+      fontSize: '32px',
+      color: '#d4a574',
       fontFamily: 'BoldPixels, Courier New, monospace'
     });
     subtitle.setOrigin(0.5);
 
     // Tint the law scroll blue
-    this.law.setTint(0x6699ff);
+    this.law.setTint(0x99ccff);
   }
 
   protected onCollision(): void {
@@ -62,7 +62,7 @@ export default class FARGame extends BaseGame {
   protected updateGameSpecifics(): void {
     // Update score based on size (normalized to 0-100 range)
     this.score = (this.buildingScale / 0.15) * 100;
-    this.scoreText.setText(`SCR:${Math.round(this.score).toString().padStart(3, '0')}`);
+    this.scoreText.setText(`SCORE: ${Math.round(this.score)}`);
   }
 }
 

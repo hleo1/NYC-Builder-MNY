@@ -9,7 +9,7 @@ export default class Article78Game extends BaseGame {
   }
 
   protected getGameTitle(): string {
-    return '>> ARTICLE 78 <<';
+    return 'ARTICLE 78';
   }
 
   protected getLawLabel(): string {
@@ -19,15 +19,15 @@ export default class Article78Game extends BaseGame {
   protected setupGameSpecifics(): void {
     const { width, height } = this.cameras.main;
     
-    const subtitle = this.add.text(width / 2, 105, '[ SLOWDOWN LAW // AVOID CONTACT ]', {
-      fontSize: '12px',
-      color: '#ff00ff',
+    const subtitle = this.add.text(width / 2, 85, 'SLOWDOWN LAW - AVOID CONTACT', {
+      fontSize: '32px',
+      color: '#d4a574',
       fontFamily: 'BoldPixels, Courier New, monospace'
     });
     subtitle.setOrigin(0.5);
 
     // Tint the law scroll red
-    this.law.setTint(0xff6666);
+    this.law.setTint(0xff9999);
 
     // Spawn law further away from player for Article 78 (easier difficulty)
     this.law.setPosition(80, height - 100);
@@ -59,7 +59,7 @@ export default class Article78Game extends BaseGame {
   protected updateGameSpecifics(): void {
     // Update score based on speed
     this.score = this.slowdownFactor * 100;
-    this.scoreText.setText(`SCR:${Math.round(this.score).toString().padStart(3, '0')}`);
+    this.scoreText.setText(`SCORE: ${Math.round(this.score)}`);
 
     // Check if building is frozen (too slow)
     if (this.buildingSpeed <= this.minSpeed + 5) {

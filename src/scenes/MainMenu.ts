@@ -1,6 +1,15 @@
 import Phaser from 'phaser';
 
 export default class MainMenu extends Phaser.Scene {
+  // Individual scale settings for each icon (adjust as needed)
+
+  private multipler = 0.85;
+  private iconScales = {
+    article78: 0.95 * this.multipler,
+    far: 1 * this.multipler,
+    memberDeference: 0.21 * this.multipler
+  };
+
   constructor() {
     super({ key: 'MainMenu' });
   }
@@ -10,6 +19,14 @@ export default class MainMenu extends Phaser.Scene {
     this.load.image('building', 'Building.png');
     this.load.image('script', 'Script.png');
     this.load.image('logo', 'logo.png');
+
+    // Load background
+    this.load.image('mainMenuBackground', 'main-menu-background.png');
+
+    // Load game icons
+    this.load.image('article78Icon', 'icons/Article 78 Icon.png');
+    this.load.image('farIcon', 'icons/FAR Icon.png');
+    this.load.image('memberDeferenceIcon', 'icons/Member Deference.png');
 
     // Load WebFont library for custom font
     this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
@@ -33,229 +50,146 @@ export default class MainMenu extends Phaser.Scene {
   create() {
     const { width, height } = this.cameras.main;
 
-    // Set retro background color (dark blue like old CRT monitors)
-    this.cameras.main.setBackgroundColor('#000033');
+    // Add main menu background image
+    const background = this.add.image(width / 2, height / 2, 'mainMenuBackground');
+    background.setOrigin(0.5);
+    
+    // Scale background to fit the canvas (should be 1:1 now)
+    const scaleX = width / background.width;
+    const scaleY = height / background.height;
+    const scale = Math.max(scaleX, scaleY);
+    background.setScale(scale);
 
-    // Add scanline effect overlay
-    this.createScanlineEffect(width, height);
+    // Create the three game icons horizontally centered
+    const iconY = height * 0.74; // 74% down the screen (bottom half)
+    
+    // Horizontally center the icons - evenly distributed around center
+    const icon1X = width * 0.25; // 25% from left
+    const icon2X = width * 0.50; // Center
+    const icon3X = width * 0.78; // 75% from left (25% from right)
 
-    // Add Maximum New York logo - smaller and higher
-    const logo = this.add.image(width / 2, 70, 'logo');
-    logo.setOrigin(0.5);
-    logo.setScale(0.35); // Smaller to save space
-
-    // Add retro title text - moved down slightly
-    const title = this.add.text(width / 2, 165, 'NYC BUILDER', {
-      fontSize: '48px',
-      color: '#00ff00',
-      fontFamily: 'BoldPixels, Courier New, monospace',
-      fontStyle: 'bold'
-    });
-    title.setOrigin(0.5);
-
-    const year = this.add.text(width / 2, 210, '**  2 0 2 5  **', {
-      fontSize: '24px',
-      color: '#ff00ff',
-      fontFamily: 'BoldPixels, Courier New, monospace',
-      fontStyle: 'bold'
-    });
-    year.setOrigin(0.5);
-
-    // Blinking Maximum New York branding
-    const branding = this.add.text(width / 2, 245, '>> MAXIMUM NEW YORK <<', {
-      fontSize: '14px',
-      color: '#ffff00',
-      fontFamily: 'BoldPixels, Courier New, monospace'
-    });
-    branding.setOrigin(0.5);
-    this.tweens.add({
-      targets: branding,
-      alpha: 0.3,
-      duration: 800,
-      yoyo: true,
-      repeat: -1
-    });
-
-    // Add subtitle with retro spacing
-    const subtitle = this.add.text(width / 2, 275, '= SELECT LEVEL =', {
-      fontSize: '16px',
-      color: '#00ffff',
-      fontFamily: 'BoldPixels, Courier New, monospace'
-    });
-    subtitle.setOrigin(0.5);
-
-    // Create Article 78 button - better spacing
-    this.createMenuButton(
-      width / 2, 
-      height / 2 + 20, 
-      '▼ ARTICLE 78',
-      'SLOWDOWN LAW',
-      '#00ff00',
-      '#00ff77',
+    // Article 78 Icon
+    this.createGameIcon(
+      icon1X,
+      iconY,
+      'article78Icon',
+      'ARTICLE 78',
+      this.iconScales.article78,
       () => this.scene.start('Article78Game')
     );
 
-    // Create FAR button
-    this.createMenuButton(
-      width / 2, 
-      height / 2 + 105, 
-      '◄► F.A.R.',
-      'SHRINK LAW',
-      '#00ffff',
-      '#00dddd',
+    // FAR Icon
+    this.createGameIcon(
+      icon2X,
+      iconY,
+      'farIcon',
+      'FAR',
+      this.iconScales.far,
       () => this.scene.start('FARGame')
     );
 
-    // Create Member Deference button
-    this.createMenuButton(
-      width / 2, 
-      height / 2 + 190, 
-      '☠ MEMBER DEFERENCE',
-      'INSTANT DEATH',
-      '#ff00ff',
-      '#ff77ff',
+    // Member Deference Icon
+    this.createGameIcon(
+      icon3X,
+      iconY,
+      'memberDeferenceIcon',
+      'MEMBER DEFERENCE',
+      this.iconScales.memberDeference,
       () => this.scene.start('MemberDeferenceGame')
     );
-
-    // Add retro footer - moved up slightly for better balance
-    const footer = this.add.text(width / 2, height - 75, '[  ARROW KEYS TO MOVE  ]', {
-      fontSize: '18px',
-      color: '#00ff00',
-      fontFamily: 'BoldPixels, Courier New, monospace'
-    });
-    footer.setOrigin(0.5);
-
-    const infoText = this.add.text(width / 2, height - 48, 'SURVIVE THE LAWS // SAVE THE BUILDINGS', {
-      fontSize: '16px',
-      color: '#ff00ff',
-      fontFamily: 'BoldPixels, Courier New, monospace'
-    });
-    infoText.setOrigin(0.5);
-
-    // Add retro "PRESS START" style credits
-    const credits = this.add.text(width / 2, height - 20, 'C 2025 MAX NY', {
-      fontSize: '11px',
-      color: '#666666',
-      fontFamily: 'BoldPixels, Courier New, monospace'
-    });
-    credits.setOrigin(0.5);
-
-    // Add retro pixel grid background
-    this.createRetroGrid(width, height);
-    
-    // Add animated retro stars/pixels in background
-    for (let i = 0; i < 30; i++) {
-      const pixel = this.add.rectangle(
-        Phaser.Math.Between(0, width),
-        Phaser.Math.Between(0, height),
-        2, 2,
-        i % 3 === 0 ? 0x00ff00 : i % 3 === 1 ? 0xff00ff : 0x00ffff
-      );
-      pixel.setAlpha(0.5);
-      
-      this.tweens.add({
-        targets: pixel,
-        alpha: 0,
-        duration: Phaser.Math.Between(1000, 3000),
-        repeat: -1,
-        yoyo: true
-      });
-    }
   }
 
-  private createScanlineEffect(width: number, height: number) {
-    // Create CRT scanline effect
-    for (let i = 0; i < height; i += 4) {
-      const line = this.add.rectangle(0, i, width, 2, 0x000000, 0.3);
-      line.setOrigin(0);
-    }
-  }
-
-  private createRetroGrid(width: number, height: number) {
-    // Create retro grid lines
-    const graphics = this.add.graphics();
-    graphics.lineStyle(1, 0x00ff00, 0.1);
-    
-    // Vertical lines
-    for (let x = 0; x < width; x += 40) {
-      graphics.lineBetween(x, 0, x, height);
-    }
-    
-    // Horizontal lines
-    for (let y = 0; y < height; y += 40) {
-      graphics.lineBetween(0, y, width, y);
-    }
-    
-    graphics.strokePath();
-  }
-
-  private createMenuButton(
-    x: number, 
-    y: number, 
-    text: string, 
-    subtitle: string,
-    color: string, 
-    hoverColor: string,
+  private createGameIcon(
+    x: number,
+    y: number,
+    iconKey: string,
+    label: string,
+    scale: number,
     onClick: () => void
   ) {
     const container = this.add.container(x, y);
 
-    // Retro button background with pixel border
-    const buttonBg = this.add.rectangle(0, 0, 500, 70, parseInt(color.replace('#', '0x')));
-    buttonBg.setStrokeStyle(4, parseInt(hoverColor.replace('#', '0x')));
-    buttonBg.setInteractive({ useHandCursor: true });
+    // Create yellow glow (initially invisible)
+    const glow = this.add.circle(0, 0, 80, 0xffff00, 0);
+    glow.setBlendMode(Phaser.BlendModes.ADD);
 
-    // Pixel corners for retro effect
-    const cornerSize = 8;
-    const corners = [
-      this.add.rectangle(-250 + cornerSize/2, -35 + cornerSize/2, cornerSize, cornerSize, 0x000000),
-      this.add.rectangle(250 - cornerSize/2, -35 + cornerSize/2, cornerSize, cornerSize, 0x000000),
-      this.add.rectangle(-250 + cornerSize/2, 35 - cornerSize/2, cornerSize, cornerSize, 0x000000),
-      this.add.rectangle(250 - cornerSize/2, 35 - cornerSize/2, cornerSize, cornerSize, 0x000000)
-    ];
+    // Create the icon
+    const icon = this.add.image(0, 0, iconKey);
+    icon.setOrigin(0.5);
+    icon.setScale(scale);
+    icon.setInteractive({ useHandCursor: true });
 
-    // Button text with retro font
-    const buttonText = this.add.text(0, -8, text, {
-      fontSize: '24px',
-      color: '#000000',
+    // Store references for scaling
+    icon.setData('baseScale', scale);
+    icon.setData('glow', glow);
+
+    // Create label below the icon
+    const labelText = this.add.text(0, 120, label, {
+      fontSize: '40px',
+      color: '#ffffff',
       fontFamily: 'BoldPixels, Courier New, monospace',
-      fontStyle: 'bold'
+      fontStyle: 'bold',
+      align: 'center',
+      wordWrap: { width: 210, useAdvancedWrap: true }
     });
-    buttonText.setOrigin(0.5);
+    labelText.setOrigin(0.5);
 
-    // Subtitle with retro spacing
-    const subtitleText = this.add.text(0, 18, '[ ' + subtitle + ' ]', {
-      fontSize: '12px',
-      color: '#000000',
-      fontFamily: 'BoldPixels, Courier New, monospace'
-    });
-    subtitleText.setOrigin(0.5);
+    container.add([glow, icon, labelText]);
 
-    container.add([buttonBg, ...corners, buttonText, subtitleText]);
-
-    // Retro hover effects - glitch-style
-    buttonBg.on('pointerover', () => {
-      buttonBg.setFillStyle(parseInt(hoverColor.replace('#', '0x')));
-      buttonText.setColor('#ffffff');
-      subtitleText.setColor('#ffffff');
-      
-      // Glitch effect
+    // Hover effects
+    icon.on('pointerover', () => {
+      // Show yellow glow
       this.tweens.add({
-        targets: container,
-        x: x + 2,
-        duration: 50,
-        yoyo: true,
-        repeat: 2
+        targets: glow,
+        alpha: 0.6,
+        duration: 200
+      });
+
+      // Enlarge icon
+      this.tweens.add({
+        targets: icon,
+        scale: icon.getData('baseScale') * 1.15,
+        duration: 200,
+        ease: 'Back.easeOut'
+      });
+
+      // Enlarge and highlight label
+      labelText.setColor('#ffff00');
+      this.tweens.add({
+        targets: labelText,
+        scale: 1.1,
+        duration: 200,
+        ease: 'Back.easeOut'
       });
     });
 
-    buttonBg.on('pointerout', () => {
-      buttonBg.setFillStyle(parseInt(color.replace('#', '0x')));
-      buttonText.setColor('#000000');
-      subtitleText.setColor('#000000');
+    icon.on('pointerout', () => {
+      // Hide glow
+      this.tweens.add({
+        targets: glow,
+        alpha: 0,
+        duration: 200
+      });
+
+      // Return to normal size
+      this.tweens.add({
+        targets: icon,
+        scale: icon.getData('baseScale'),
+        duration: 200,
+        ease: 'Back.easeIn'
+      });
+
+      // Reset label color and size
+      labelText.setColor('#ffffff');
+      this.tweens.add({
+        targets: labelText,
+        scale: 1,
+        duration: 200,
+        ease: 'Back.easeIn'
+      });
     });
 
-    buttonBg.on('pointerdown', onClick);
+    icon.on('pointerdown', onClick);
 
     return container;
   }
