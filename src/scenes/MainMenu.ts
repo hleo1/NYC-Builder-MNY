@@ -83,7 +83,7 @@ export default class MainMenu extends Phaser.Scene {
       icon2X,
       iconY,
       'farIcon',
-      'FAR',
+      'F.A.R.',
       this.iconScales.far,
       () => this.scene.start('FARGame')
     );

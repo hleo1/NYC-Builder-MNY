@@ -40,6 +40,13 @@ export default abstract class BaseGame extends Phaser.Scene {
   create() {
     const { width, height } = this.cameras.main;
     
+    // Reset game state variables (important for replaying)
+    this.timeRemaining = 30;
+    this.score = 100;
+    this.gameOver = false;
+    this.buildingSpeed = 200;
+    this.lawSpeed = 150;
+    
     // Chalkboard green background to match main menu
     this.cameras.main.setBackgroundColor('#2c5f4f');
 

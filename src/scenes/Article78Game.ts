@@ -19,6 +19,9 @@ export default class Article78Game extends BaseGame {
   protected setupGameSpecifics(): void {
     const { width, height } = this.cameras.main;
     
+    // Reset game-specific variables
+    this.slowdownFactor = 1.0;
+    
     const subtitle = this.add.text(width / 2, 85, 'SLOWDOWN LAW - AVOID CONTACT', {
       fontSize: '32px',
       color: '#d4a574',

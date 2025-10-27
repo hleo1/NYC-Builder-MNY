@@ -19,6 +19,10 @@ export default class FARGame extends BaseGame {
   protected setupGameSpecifics(): void {
     const { width } = this.cameras.main;
     
+    // Reset game-specific variables
+    this.buildingScale = 0.15;
+    this.building.setScale(this.buildingScale); // Reset building size
+    
     const subtitle = this.add.text(width / 2, 85, 'SHRINK LAW - DON\'T DISAPPEAR', {
       fontSize: '32px',
       color: '#d4a574',

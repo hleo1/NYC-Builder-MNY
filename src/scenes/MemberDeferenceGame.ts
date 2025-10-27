@@ -19,6 +19,10 @@ export default class MemberDeferenceGame extends BaseGame {
   protected setupGameSpecifics(): void {
     const { width } = this.cameras.main;
     
+    // Reset game-specific variables (critical for replay)
+    this.hasCollided = false;
+    this.prop4Container = undefined;
+    
     const subtitle = this.add.text(width / 2, 85, 'ONE HIT = DEATH', {
       fontSize: '36px',
       color: '#ff6b6b',
@@ -81,9 +85,9 @@ export default class MemberDeferenceGame extends BaseGame {
     const panel = this.add.rectangle(0, 0, 650, 450, 0x1a3a2f, 0.98);
     panel.setStrokeStyle(6, 0xf5deb3);
 
-    // Dramatic text with chalkboard font - bigger
+    // Dramatic text with chalkboard font - even bigger
     const lossText = this.add.text(0, -150, 'BUILDING DESTROYED', {
-      fontSize: '36px',
+      fontSize: '44px',
       color: '#ff6b6b',
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold',
@@ -92,7 +96,7 @@ export default class MemberDeferenceGame extends BaseGame {
     lossText.setOrigin(0.5);
 
     const warningText = this.add.text(0, -100, 'MEMBER DEFERENCE IS', {
-      fontSize: '24px',
+      fontSize: '32px',
       color: '#f5deb3',
       fontFamily: 'BoldPixels, Courier New, monospace',
       align: 'center'
@@ -100,7 +104,7 @@ export default class MemberDeferenceGame extends BaseGame {
     warningText.setOrigin(0.5);
 
     const powerText = this.add.text(0, -70, 'TOO POWERFUL!', {
-      fontSize: '24px',
+      fontSize: '32px',
       color: '#f5deb3',
       fontFamily: 'BoldPixels, Courier New, monospace',
       align: 'center'
@@ -108,7 +112,7 @@ export default class MemberDeferenceGame extends BaseGame {
     powerText.setOrigin(0.5);
 
     const hopeText = this.add.text(0, -30, '...UNLESS...', {
-      fontSize: '28px',
+      fontSize: '36px',
       color: '#ffd700',
       fontFamily: 'BoldPixels, Courier New, monospace',
       fontStyle: 'bold',
@@ -121,7 +125,7 @@ export default class MemberDeferenceGame extends BaseGame {
     buttonBg.setStrokeStyle(5, 0xf5deb3);
     buttonBg.setInteractive({ useHandCursor: true });
 
-    const buttonText = this.add.text(0, 55, 'YES ON PROP 4', {
+    const buttonText = this.add.text(0, 55, 'YES ON PROPOSITION 4', {
       fontSize: '42px',
       color: '#1a3a2f',
       fontFamily: 'BoldPixels, Courier New, monospace',
@@ -131,7 +135,7 @@ export default class MemberDeferenceGame extends BaseGame {
     buttonText.setOrigin(0.5);
 
     const subText = this.add.text(0, 95, 'PRESS TO ACTIVATE', {
-      fontSize: '20px',
+      fontSize: '26px',
       color: '#1a3a2f',
       fontFamily: 'BoldPixels, Courier New, monospace',
       align: 'center'
@@ -139,7 +143,7 @@ export default class MemberDeferenceGame extends BaseGame {
     subText.setOrigin(0.5);
 
     const instructText = this.add.text(0, 160, 'CLICK TO DEFEAT LAW', {
-      fontSize: '20px',
+      fontSize: '26px',
       color: '#90ee90',
       fontFamily: 'BoldPixels, Courier New, monospace',
       align: 'center'
@@ -215,16 +219,12 @@ export default class MemberDeferenceGame extends BaseGame {
       ease: 'Power2'
     });
 
-    // Restore building
-    this.tweens.add({
-      targets: this.building,
-      scale: 1.5,
-      duration: 500,
-      yoyo: true
-    });
-
     // Victory message with chalkboard style
     this.time.delayedCall(500, () => {
+      // Background panel similar to defeat popup
+      const victoryPanel = this.add.rectangle(width / 2, height / 2, 650, 450, 0x1a3a2f, 0.98);
+      victoryPanel.setStrokeStyle(6, 0xf5deb3);
+
       const victoryText = this.add.text(width / 2, height / 2 - 120, 'VICTORY!', {
         fontSize: '64px',
         color: '#90ee90',
