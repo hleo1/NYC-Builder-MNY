@@ -12,6 +12,13 @@ export default abstract class BaseGame extends Phaser.Scene {
   protected cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   protected buildingSpeed: number = 200;
   protected lawSpeed: number = 150;
+  
+  // Virtual joystick for mobile
+  protected useJoystick: boolean = false;
+  protected joystickBase?: Phaser.GameObjects.Arc;
+  protected joystickThumb?: Phaser.GameObjects.Arc;
+  protected joystickPointer?: Phaser.Input.Pointer;
+  protected joystickVector: { x: number, y: number } = { x: 0, y: 0 };
 
   preload() {
     // Load game assets
@@ -114,6 +121,10 @@ export default abstract class BaseGame extends Phaser.Scene {
       this.scene.start('MainMenu');
     });
 
+    // Always show virtual joystick
+    this.useJoystick = true;
+    this.createVirtualJoystick(width, height);
+
     // Start timer
     this.time.addEvent({
       delay: 1000,
@@ -129,22 +140,29 @@ export default abstract class BaseGame extends Phaser.Scene {
   update() {
     if (this.gameOver) return;
 
-    // Move building with arrow keys
+    // Move building with arrow keys or virtual joystick
     const speed = this.buildingSpeed;
     let velocityX = 0;
     let velocityY = 0;
     
     // Calculate movement direction
-    if (this.cursors.left.isDown) {
-      velocityX = -1;
-    } else if (this.cursors.right.isDown) {
-      velocityX = 1;
-    }
+    if (this.useJoystick && (this.joystickVector.x !== 0 || this.joystickVector.y !== 0)) {
+      // Use virtual joystick input
+      velocityX = this.joystickVector.x;
+      velocityY = this.joystickVector.y;
+    } else {
+      // Use keyboard input
+      if (this.cursors.left.isDown) {
+        velocityX = -1;
+      } else if (this.cursors.right.isDown) {
+        velocityX = 1;
+      }
 
-    if (this.cursors.up.isDown) {
-      velocityY = -1;
-    } else if (this.cursors.down.isDown) {
-      velocityY = 1;
+      if (this.cursors.up.isDown) {
+        velocityY = -1;
+      } else if (this.cursors.down.isDown) {
+        velocityY = 1;
+      }
     }
 
     // Normalize diagonal movement (divide by sqrt(2) when moving diagonally)
@@ -267,6 +285,78 @@ export default abstract class BaseGame extends Phaser.Scene {
     });
   }
 
+
+  protected createVirtualJoystick(_width: number, height: number): void {
+    const joystickRadius = 60;
+    const thumbRadius = 25;
+    const joystickX = 100;
+    const joystickY = height - 100;
+
+    // Create semi-transparent joystick base
+    this.joystickBase = this.add.circle(joystickX, joystickY, joystickRadius, 0xffffff, 0.2);
+    this.joystickBase.setStrokeStyle(3, 0xffffff, 0.4);
+    this.joystickBase.setDepth(1000);
+
+    // Create semi-transparent joystick thumb
+    this.joystickThumb = this.add.circle(joystickX, joystickY, thumbRadius, 0xffffff, 0.4);
+    this.joystickThumb.setStrokeStyle(3, 0xffffff, 0.6);
+    this.joystickThumb.setDepth(1001);
+
+    // Make joystick interactive
+    this.joystickBase.setInteractive();
+
+    this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      const distance = Phaser.Math.Distance.Between(
+        pointer.x,
+        pointer.y,
+        joystickX,
+        joystickY
+      );
+
+      if (distance < joystickRadius + 50) {
+        this.joystickPointer = pointer;
+      }
+    });
+
+    this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+      if (this.joystickPointer === pointer && this.joystickThumb && this.joystickBase) {
+        const angle = Phaser.Math.Angle.Between(
+          joystickX,
+          joystickY,
+          pointer.x,
+          pointer.y
+        );
+
+        const distance = Math.min(
+          Phaser.Math.Distance.Between(joystickX, joystickY, pointer.x, pointer.y),
+          joystickRadius - thumbRadius
+        );
+
+        // Update thumb position
+        this.joystickThumb.x = joystickX + Math.cos(angle) * distance;
+        this.joystickThumb.y = joystickY + Math.sin(angle) * distance;
+
+        // Calculate normalized vector
+        if (distance > 10) {
+          this.joystickVector.x = Math.cos(angle);
+          this.joystickVector.y = Math.sin(angle);
+        } else {
+          this.joystickVector.x = 0;
+          this.joystickVector.y = 0;
+        }
+      }
+    });
+
+    this.input.on('pointerup', (pointer: Phaser.Input.Pointer) => {
+      if (this.joystickPointer === pointer && this.joystickThumb) {
+        this.joystickPointer = undefined;
+        this.joystickThumb.x = joystickX;
+        this.joystickThumb.y = joystickY;
+        this.joystickVector.x = 0;
+        this.joystickVector.y = 0;
+      }
+    });
+  }
 
   protected abstract getGameTitle(): string;
   protected abstract getLawLabel(): string;
