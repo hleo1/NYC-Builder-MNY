@@ -271,14 +271,14 @@ export default abstract class BaseGame extends Phaser.Scene {
     });
     finalScore.setOrigin(0.5);
 
-    const menuText = this.add.text(width / 2, height / 2 + 100, 'PRESS SPACE', {
+    const menuText = this.add.text(width / 2, height / 2 + 100, 'PRESS SPACE OR TAP TO MAIN MENU', {
       fontSize: '28px',
       color: '#ffffff',
       fontFamily: 'BoldPixels, Courier New, monospace'
     });
     menuText.setOrigin(0.5);
 
-    // Blinking "press space"
+    // Blinking "press space or tap"
     this.tweens.add({
       targets: menuText,
       alpha: 0.3,
@@ -287,9 +287,17 @@ export default abstract class BaseGame extends Phaser.Scene {
       repeat: -1
     });
 
-    this.input.keyboard!.once('keydown-SPACE', () => {
+    // Handler to return to main menu
+    const returnToMenu = () => {
       this.scene.start('MainMenu');
-    });
+    };
+
+    // Space key to return to menu
+    this.input.keyboard!.once('keydown-SPACE', returnToMenu);
+
+    // Tap/click anywhere on overlay to return to menu
+    overlay.setInteractive();
+    overlay.once('pointerdown', returnToMenu);
   }
 
 

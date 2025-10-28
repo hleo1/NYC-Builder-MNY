@@ -23,6 +23,10 @@ export default class MemberDeferenceGame extends BaseGame {
     this.hasCollided = false;
     this.prop4Container = undefined;
     
+    // Set starting score to 1000
+    this.score = 1000;
+    this.scoreText.setText('SCORE: 1000');
+    
     const subtitle = this.add.text(width / 2, 85, 'ONE HIT = DEATH', {
       fontSize: '36px',
       color: '#ff6b6b',
@@ -221,9 +225,9 @@ export default class MemberDeferenceGame extends BaseGame {
 
     // Victory message with chalkboard style
     this.time.delayedCall(500, () => {
-      // Background panel similar to defeat popup
-      const victoryPanel = this.add.rectangle(width / 2, height / 2, 650, 450, 0x1a3a2f, 0.98);
-      victoryPanel.setStrokeStyle(6, 0xf5deb3);
+      // Black overlay (matching Article78/FAR style)
+      const overlay = this.add.rectangle(0, 0, width, height, 0x1a3a2f, 0.9);
+      overlay.setOrigin(0);
 
       const victoryText = this.add.text(width / 2, height / 2 - 120, 'VICTORY!', {
         fontSize: '64px',
@@ -265,14 +269,14 @@ export default class MemberDeferenceGame extends BaseGame {
       scoreText.setOrigin(0.5);
 
       const perfectText = this.add.text(width / 2, height / 2 + 115, 'PERFECT', {
-        fontSize: '24px',
+        fontSize: '28px',
         color: '#ffd700',
         fontFamily: 'BoldPixels, Courier New, monospace'
       });
       perfectText.setOrigin(0.5);
 
-      const menuText = this.add.text(width / 2, height / 2 + 160, 'PRESS SPACE', {
-        fontSize: '24px',
+      const menuText = this.add.text(width / 2, height / 2 + 160, 'PRESS SPACE OR TAP TO MAIN MENU', {
+        fontSize: '28px',
         color: '#90ee90',
         fontFamily: 'BoldPixels, Courier New, monospace'
       });
@@ -305,9 +309,17 @@ export default class MemberDeferenceGame extends BaseGame {
         });
       }
 
-      this.input.keyboard!.once('keydown-SPACE', () => {
+      // Handler to return to main menu
+      const returnToMenu = () => {
         this.scene.start('MainMenu');
-      });
+      };
+
+      // Space key to return to menu
+      this.input.keyboard!.once('keydown-SPACE', returnToMenu);
+
+      // Tap/click anywhere on overlay to return to menu
+      overlay.setInteractive();
+      overlay.once('pointerdown', returnToMenu);
     });
   }
 
