@@ -12,6 +12,8 @@ export default abstract class BaseGame extends Phaser.Scene {
   protected cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   protected buildingSpeed: number = 200;
   protected lawSpeed: number = 150;
+  protected baseLawSpeed: number = 150; // Base speed to reset to after collision
+  protected lawAcceleration: number = 5; // Speed increase per second during hunt
   
   // Virtual joystick for mobile
   protected useJoystick: boolean = false;
@@ -53,6 +55,8 @@ export default abstract class BaseGame extends Phaser.Scene {
     this.gameOver = false;
     this.buildingSpeed = 200;
     this.lawSpeed = 150;
+    this.baseLawSpeed = 150;
+    this.lawAcceleration = 5;
     
     // Chalkboard green background to match main menu
     this.cameras.main.setBackgroundColor('#2c5f4f');
@@ -183,6 +187,9 @@ export default abstract class BaseGame extends Phaser.Scene {
 
     // Move law towards building
     this.moveLawTowardsBuilding();
+
+    // Gradually increase law speed (acceleration)
+    this.lawSpeed += this.lawAcceleration * 0.016;
 
     // Check collision (adjusted for smaller image sizes)
     const distance = Phaser.Math.Distance.Between(
@@ -356,6 +363,11 @@ export default abstract class BaseGame extends Phaser.Scene {
         this.joystickVector.y = 0;
       }
     });
+  }
+
+  protected resetLawSpeed(): void {
+    // Reset law speed to base speed after collision
+    this.lawSpeed = this.baseLawSpeed;
   }
 
   protected abstract getGameTitle(): string;

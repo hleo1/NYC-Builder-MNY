@@ -3,6 +3,9 @@ import BaseGame from './BaseGame';
 export default class Article78Game extends BaseGame {
   private slowdownFactor: number = 1.0;
   private minSpeed: number = 20;
+  private baseLawSpeedFactor: number = 1.0; // Reduces with each collision
+  private initialBaseLawSpeed: number = 200; // Starting base law speed (matches building speed)
+  private huntTimer: number = 0; // Tracks time since last collision
 
   constructor() {
     super({ key: 'Article78Game' });
@@ -21,6 +24,12 @@ export default class Article78Game extends BaseGame {
     
     // Reset game-specific variables
     this.slowdownFactor = 1.0;
+    this.baseLawSpeedFactor = 1.0;
+    this.huntTimer = 0;
+    
+    // Set initial law speed to 90% of base speed
+    this.baseLawSpeed = this.initialBaseLawSpeed * this.baseLawSpeedFactor;
+    this.lawSpeed = this.baseLawSpeed * 0.9;
     
     const subtitle = this.add.text(width / 2, 85, 'SLOWDOWN LAW - AVOID CONTACT', {
       fontSize: '32px',
@@ -41,6 +50,14 @@ export default class Article78Game extends BaseGame {
     this.slowdownFactor *= 0.85;
     this.buildingSpeed = Math.max(this.minSpeed, 200 * this.slowdownFactor);
 
+    // Reduce base law speed (same rate as building slowdown)
+    this.baseLawSpeedFactor *= 0.85;
+    this.baseLawSpeed = this.initialBaseLawSpeed * this.baseLawSpeedFactor;
+    
+    // Reset hunt timer and start at 90% of new base speed
+    this.huntTimer = 0;
+    this.lawSpeed = this.baseLawSpeed * 0.9;
+
     // Visual feedback
     this.cameras.main.shake(100, 0.002);
     
@@ -60,6 +77,14 @@ export default class Article78Game extends BaseGame {
   }
 
   protected updateGameSpecifics(): void {
+    // Update hunt timer (time since last collision)
+    this.huntTimer += 0.016; // Roughly 1/60th of a second per frame
+    
+    // Calculate law speed: 90% to 110% of base speed over 5 seconds
+    const speedProgress = Math.min(this.huntTimer / 5.0, 1.0); // 0 to 1 over 5 seconds
+    const speedMultiplier = 0.9 + (0.2 * speedProgress); // 0.9 to 1.1
+    this.lawSpeed = this.baseLawSpeed * speedMultiplier;
+    
     // Update score based on speed
     this.score = this.slowdownFactor * 100;
     this.scoreText.setText(`SCORE: ${Math.round(this.score)}`);
